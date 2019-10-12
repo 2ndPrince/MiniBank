@@ -1,6 +1,7 @@
 ## Minibank
 
 This project is a full stack project for simple banking web application.
+
 Technologoies used are React, Node.js, Express with MySQL database.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
