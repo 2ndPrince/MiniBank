@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import Customer from './components/customers/Customer'
+import CustomerAdd from './components/customers/CustomerAdd'
 
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -87,6 +88,7 @@ class App extends React.Component{
           </TableBody>
           </Table>
         </Paper>
+        <CustomerAdd/>
       </div>
     );
   }
