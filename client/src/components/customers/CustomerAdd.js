@@ -30,6 +30,20 @@ export default class CustomerAdd extends React.Component {
             .then((response) => {
             console.log(response.data); 
         })
+        this.setState({
+            file: null,
+            fileName: "",
+            name: "",
+            ssn: "",
+            yymmdd: "",
+            address1: "",
+            address2: "",
+            city: "",
+            state: "",
+            zipCode: "",
+            isActivated: 0
+        })
+        window.location.reload();
     }
         
     handleFileChange(e) {    
@@ -63,7 +77,7 @@ export default class CustomerAdd extends React.Component {
                 'content-type': 'multipart/form-data'
             }
         }
-        return post(url, formData, config)    
+        return post(url, formData, config);  
     }
         
     render() {
@@ -71,14 +85,14 @@ export default class CustomerAdd extends React.Component {
             <form onSubmit={this.handleFormSubmit}>
                 <h1>Adding a Customer</h1>
                 Profile Image: <input type="file" name="file" file={this.state.file} value={this.state.fileName} onChange={this.handleFileChange} /><br/>
-                Name: <input type="text" name="userName" value={this.state.name} onChange={this.handleValueChange} /><br/>
-                SSN: <input type="text" name="birthday" value={this.state.ssn} onChange={this.handleValueChange} /><br/>
-                YYMMDD: <input type="text" name="gender" value={this.state.yymmdd} onChange={this.handleValueChange} /><br/>
-                ADDRESS1: <input type="text" name="job" value={this.state.address1} onChange={this.handleValueChange} /><br/>
-                ADDRESS2: <input type="text" name="job" value={this.state.address2} onChange={this.handleValueChange} /><br/>
-                CITY: <input type="text" name="job" value={this.state.city} onChange={this.handleValueChange} /><br/>
-                ZIPCODE: <input type="text" name="job" value={this.state.zipCode} onChange={this.handleValueChange} /><br/>
-                ISACTIVATED: <input type="text" name="job" value={this.state.isActivated} onChange={this.handleValueChange} /><br/>
+                Name: <input type="text" name="name" value={this.state.name} onChange={this.handleValueChange} /><br/>
+                SSN: <input type="text" name="ssn" value={this.state.ssn} onChange={this.handleValueChange} /><br/>
+                YYMMDD: <input type="text" name="yymmdd" value={this.state.yymmdd} onChange={this.handleValueChange} /><br/>
+                ADDRESS1: <input type="text" name="address1" value={this.state.address1} onChange={this.handleValueChange} /><br/>
+                ADDRESS2: <input type="text" name="address2" value={this.state.address2} onChange={this.handleValueChange} /><br/>
+                CITY: <input type="text" name="city" value={this.state.city} onChange={this.handleValueChange} /><br/>
+                ZIPCODE: <input type="text" name="zipCode" value={this.state.zipCode} onChange={this.handleValueChange} /><br/>
+                ISACTIVATED: <input type="text" name="isActivated" value={this.state.isActivated} onChange={this.handleValueChange} /><br/>
                 <button type="submit">Submit</button>
             </form>
 
