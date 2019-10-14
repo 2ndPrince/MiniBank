@@ -103,15 +103,18 @@ class App extends React.Component{
     super(props);
     this.state ={
       customers: "",
-      completed: 0
+      completed: 0,
+      searchKeyword: ""
     }
     this.stateRefresh = this.stateRefresh.bind(this);
+    this.handleValueChange = this.handleValueChange.bind(this);
   }
 
   stateRefresh(){
     this.setState({
       customers: "",
-      completed: 0
+      completed: 0,
+      searchKeyword: ""
     });
     this.callApi()
       .then(res=> this.setState({customers: res}))
@@ -143,9 +146,23 @@ class App extends React.Component{
     });
   }
 
+  handleValueChange(e){
+    let nextState = {};
+    nextState[e.target.name] = e.target.value;
+    this.setState(nextState);
+  }
+
   render(){  
     const { classes } = this.props;
     const cellList = ["CUSTOMER ID", "IMAGE", "NAME", "SSN", "YYMMDD", "ADDRESS1", "ADDRESS2", "CITY", "STATE", "ZIPCODE", "SETTING"];
+    const filteredComponents = (data) => {
+      data = data.filter((c) => {
+        return c.name.indexOf(this.state.searchKeyword) > -1 ;
+      });
+      return data.map((c) => {
+        return <Customer stateRefresh={this.stateRefresh} key={c.customerId} customerId={c.customerId} image={c.image} name={c.name} ssn={c.ssn} yymmdd={c.yymmdd} address1={c.address1} address2={c.address2} city={c.city} myState={c.myState} zipCode={c.zipCode} /> 
+      });
+    }
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -154,7 +171,7 @@ class App extends React.Component{
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-            CUSTMER MANAGEMENT
+              CUSTMER MANAGEMENT
             </Typography>
               <div className={classes.grow} />
               <div className={classes.search}>
@@ -162,11 +179,14 @@ class App extends React.Component{
             <SearchIcon />
             </div>
             <InputBase
-            placeholder="Searching ..."
-            classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput,
-            }}
+              placeholder="Searching ..."
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              name="searchKeyword"
+              value={this.state.searchKeyword}
+              onChange={this.handleValueChange}
             />
             </div>
           </Toolbar>
@@ -184,9 +204,7 @@ class App extends React.Component{
               </TableRow>
             </TableHead>
           <TableBody>
-          {this.state.customers ? this.state.customers.map(c => {
-            return <Customer stateRefresh={this.stateRefresh} key={c.customerId} customerId={c.customerId} image={c.image} name={c.name} ssn={c.ssn} yymmdd={c.yymmdd} address1={c.address1} address2={c.address2} city={c.city} myState={c.myState} zipCode={c.zipCode} />
-          }) : 
+          {this.state.customers ? filteredComponents(this.state.customers) : 
             <TableRow>
               <TableCell colSpan="12" align="center">
                 <CircularProgress className={classes.progress} variant="determinate" value={this.state.completed} />
