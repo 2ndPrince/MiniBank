@@ -1,7 +1,19 @@
 import React from 'react';
 import { post } from 'axios';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
 
-export default class CustomerAdd extends React.Component {
+const styles = theme => ({
+    hidden: {
+        display: 'none'
+    }
+})
+class CustomerAdd extends React.Component {
 
     constructor(props){
         super(props);
@@ -16,12 +28,15 @@ export default class CustomerAdd extends React.Component {
             city: "",
             myState: "",
             zipCode: "",
-            isActivated: 1
+            isActivated: 1,
+            open: false
         }
         this.handleFormSubmit = this.handleFormSubmit.bind(this)
         this.handleFileChange = this.handleFileChange.bind(this)
         this.handleValueChange = this.handleValueChange.bind(this)
         this.addCustomer = this.addCustomer.bind(this)
+        this.handleClickOpen = this.handleClickOpen.bind(this)
+        this.handleClickClose = this.handleClickClose.bind(this)
     }
 
     handleFormSubmit(e) {
@@ -42,7 +57,8 @@ export default class CustomerAdd extends React.Component {
             city: "",
             myState: "",
             zipCode: "",
-            isActivated: 0
+            isActivated: 0,
+            open: false
         })
         this.props.stateRefresh();
     }
@@ -83,22 +99,63 @@ export default class CustomerAdd extends React.Component {
         return post(url, formData, config);  
     }
         
+    handleClickOpen() {
+        this.setState({
+            open: true
+        })
+    }
+
+    handleClickClose() {
+        this.setState({
+            file: null,
+            fileName: "",
+            name: "",
+            ssn: "",
+            yymmdd: "",
+            address1: "",
+            address2: "",
+            city: "",
+            myState: "",
+            zipCode: "",
+            isActivated: 0,
+            open: false
+        })
+    }
+
     render() {
+        const { classes } = this.props;
         return (
-            <form onSubmit={this.handleFormSubmit}>
-                <h1>Adding a Customer</h1>
-                Profile Image: <input type="file" name="file" file={this.state.file} value={this.state.fileName} onChange={this.handleFileChange} /><br/>
-                Name: <input type="text" name="name" value={this.state.name} onChange={this.handleValueChange} /><br/>
-                SSN: <input type="text" name="ssn" value={this.state.ssn} onChange={this.handleValueChange} /><br/>
-                YYMMDD: <input type="text" name="yymmdd" value={this.state.yymmdd} onChange={this.handleValueChange} /><br/>
-                ADDRESS1: <input type="text" name="address1" value={this.state.address1} onChange={this.handleValueChange} /><br/>
-                ADDRESS2: <input type="text" name="address2" value={this.state.address2} onChange={this.handleValueChange} /><br/>
-                CITY: <input type="text" name="city" value={this.state.city} onChange={this.handleValueChange} /><br/>
-                STATE: <input type="text" name="myState" value={this.state.myState} onChange={this.handleValueChange} /><br/>
-                ZIPCODE: <input type="text" name="zipCode" value={this.state.zipCode} onChange={this.handleValueChange} /><br/>
-                <button type="submit">Submit</button>
-            </form>
+            <div>
+                <Button variant ="contained" color="primary" onClick={this.handleClickOpen}>
+                    Add new customer
+                </Button>
+                <Dialog open={this.state.open} onClose={this.handleClickClose}>
+                    <DialogTitle>Adding a Customer</DialogTitle>
+                    <DialogContent>
+                        <input className={classes.hidden} accept="image/*" id="raised-button-file" type="file" file={this.state.file} value={this.state.fileName} onChange={this.handleFileChange} />
+                        <label htmlFor="raised-button-file">
+                        <Button variant="contained" color="primary" component="span" name="file">
+                            {this.state.fileName === ''? "Select Profile Image" : this.state.fileName}
+                        </Button>
+                        </label><br/>
+                        <TextField label="NAME" type="text" name="name" value={this.state.name} onChange={this.handleValueChange} /><br/>
+                        <TextField label="SSN" type="text" name="ssn" value={this.state.ssn} onChange={this.handleValueChange} /><br/>
+                        <TextField label="YYMMDD" type="text" name="yymmdd" value={this.state.yymmdd} onChange={this.handleValueChange} /><br/>
+                        <TextField label="ADDRESS1" type="text" name="address1" value={this.state.address1} onChange={this.handleValueChange} /><br/>
+                        <TextField label="ADDRESS2" type="text" name="address2" value={this.state.address2} onChange={this.handleValueChange} /><br/>
+                        <TextField label="CITY" type="text" name="city" value={this.state.city} onChange={this.handleValueChange} /><br/>
+                        <TextField label="STATE" type="text" name="myState" value={this.state.myState} onChange={this.handleValueChange} /><br/>
+                        <TextField label="ZIPCODE" type="text" name="zipCode" value={this.state.zipCode} onChange={this.handleValueChange} /><br/>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button variant="contained" color="primary" onClick={this.handleFormSubmit}>ADD</Button>
+                        <Button variant="outlined" color="primary" onClick={this.handleClickClose}>CLOSE</Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
 
         )
     }
 }
+
+export default withStyles(styles)(CustomerAdd)
