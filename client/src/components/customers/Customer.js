@@ -15,10 +15,9 @@ export default class Customer extends React.Component {
                 <TableCell>{this.props.address1}</TableCell>
                 <TableCell>{this.props.address2}</TableCell>
                 <TableCell>{this.props.city}</TableCell>
-                <TableCell>{this.props.state}</TableCell>
+                <TableCell>{this.props.myState}</TableCell>
                 <TableCell>{this.props.zipCode}</TableCell>
-                <TableCell>{this.props.isActivated}</TableCell>
-                <TableCell><CustomerDelete stateRefresh={this.props.stateRefresh} id={this.props.id} /></TableCell>
+                <TableCell><CustomerDelete stateRefresh={this.props.stateRefresh} customerId={this.props.customerId} /></TableCell>
             </TableRow>
         )
     }

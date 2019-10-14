@@ -14,9 +14,9 @@ export default class CustomerAdd extends React.Component {
             address1: "",
             address2: "",
             city: "",
-            state: "",
+            myState: "",
             zipCode: "",
-            isActivated: 0
+            isActivated: 1
         }
         this.handleFormSubmit = this.handleFormSubmit.bind(this)
         this.handleFileChange = this.handleFileChange.bind(this)
@@ -25,10 +25,11 @@ export default class CustomerAdd extends React.Component {
     }
 
     handleFormSubmit(e) {
-        e.preventDefault()
+        e.preventDefault();
         this.addCustomer()    
             .then((response) => {
-            console.log(response.data); 
+            console.log(response.data);
+            this.props.stateRefresh();
         })
         this.setState({
             file: null,
@@ -39,11 +40,11 @@ export default class CustomerAdd extends React.Component {
             address1: "",
             address2: "",
             city: "",
-            state: "",
+            myState: "",
             zipCode: "",
             isActivated: 0
         })
-        window.location.reload();
+        this.props.stateRefresh();
     }
         
     handleFileChange(e) {    
@@ -62,16 +63,18 @@ export default class CustomerAdd extends React.Component {
     addCustomer(){   
         const url = '/api/customers';
         const formData = new FormData();
-        formData.append('image', this.state.file)
-        formData.append('name', this.state.name)
-        formData.append('ssn', this.state.ssn)
-        formData.append('yymmdd', this.state.yymmdd)
-        formData.append('address1', this.state.address1)
-        formData.append('address2', this.state.address2)
-        formData.append('city', this.state.city)
-        formData.append('zipcode', this.state.zipCode)
-        formData.append('isactivated', this.state.isActivated)
-
+        formData.append('image', this.state.file);
+        formData.append('name', this.state.name);
+        formData.append('ssn', this.state.ssn);
+        formData.append('yymmdd', this.state.yymmdd);
+        formData.append('address1', this.state.address1);
+        formData.append('address2', this.state.address2);
+        formData.append('city', this.state.city);
+        formData.append('myState', this.state.myState);
+        formData.append('zipCode', this.state.zipCode);
+        formData.append('isActivated', this.state.isActivated);
+        console.log("My isActivate value is:");
+        console.log(this.state.isActivated);
         const config = {
             headers: {
                 'content-type': 'multipart/form-data'
@@ -91,8 +94,8 @@ export default class CustomerAdd extends React.Component {
                 ADDRESS1: <input type="text" name="address1" value={this.state.address1} onChange={this.handleValueChange} /><br/>
                 ADDRESS2: <input type="text" name="address2" value={this.state.address2} onChange={this.handleValueChange} /><br/>
                 CITY: <input type="text" name="city" value={this.state.city} onChange={this.handleValueChange} /><br/>
+                STATE: <input type="text" name="myState" value={this.state.myState} onChange={this.handleValueChange} /><br/>
                 ZIPCODE: <input type="text" name="zipCode" value={this.state.zipCode} onChange={this.handleValueChange} /><br/>
-                ISACTIVATED: <input type="text" name="isActivated" value={this.state.isActivated} onChange={this.handleValueChange} /><br/>
                 <button type="submit">Submit</button>
             </form>
 

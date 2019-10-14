@@ -25,10 +25,25 @@ const styles = theme => ({
 
 class App extends React.Component{
 
-  state ={
-    customers: "",
-    completed: 0
+  constructor(props){
+    super(props);
+    this.state ={
+      customers: "",
+      completed: 0
+    }
+    this.stateRefresh = this.stateRefresh.bind(this);
   }
+
+  stateRefresh(){
+    this.setState({
+      customers: "",
+      completed: 0
+    });
+    this.callApi()
+      .then(res=> this.setState({customers: res}))
+      .catch(err=> console.log(err));
+  }
+  
 
   componentDidMount(){
     this.timer = setInterval(this.progress, 20);
@@ -72,12 +87,12 @@ class App extends React.Component{
                 <TableCell>CITY</TableCell>
                 <TableCell>STATE</TableCell>
                 <TableCell>ZIPCODE</TableCell>
-                <TableCell>ISACTIVATED</TableCell>
+                <TableCell>SETTING</TableCell>
               </TableRow>
             </TableHead>
           <TableBody>
           {this.state.customers ? this.state.customers.map(c => {
-            return <Customer key={c.customerId} customerId={c.customerId} image={c.image} name={c.name} ssn={c.ssn} yymmdd={c.yymmdd} address1={c.address1} address2={c.address2} city={c.city} state={c.state} zipCode={c.zipCode} isActivated={c.isActivated} />
+            return <Customer stateRefresh={this.stateRefresh} key={c.customerId} customerId={c.customerId} image={c.image} name={c.name} ssn={c.ssn} yymmdd={c.yymmdd} address1={c.address1} address2={c.address2} city={c.city} myState={c.myState} zipCode={c.zipCode} />
           }) : 
             <TableRow>
               <TableCell colSpan="12" align="center">
@@ -88,7 +103,7 @@ class App extends React.Component{
           </TableBody>
           </Table>
         </Paper>
-        <CustomerAdd/>
+        <CustomerAdd stateRefresh={this.stateRefresh}/>
       </div>
     );
   }
